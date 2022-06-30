@@ -1,0 +1,4 @@
+Run.	File	script
+Hi.	Salut.	script
+I fell.	Je suis tombé.	script
+Try it.	Essaie.	script
