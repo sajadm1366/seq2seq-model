@@ -3,8 +3,13 @@ from seq2seq import Seq2seq
 from dataset_gen import *
 from utils import mask_sequence
 
+import argparse
+
 # os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--path', type=str, required=True)
 
 print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
@@ -29,13 +34,11 @@ def train_step(net, x, labels, weights, target, vocab_size_trg):
 
 
 
-def main():
+def main(path):
 
     # source, target = load_data(num_scenteces=4, max_len=max_len, min_word_count=0,  dataset_path_name="./test/test.txt")
-    # source, target = load_data(num_scenteces=190000, max_len=max_len, min_word_count=2)
-
-
-    data = load_data_gen(dataset_path_name="./fra-eng/fra.txt")
+    # source, target = load_data(num_scenteces=190000, max_len=max_len, min_word_count=2)   "./fra-eng/fra.txt"
+    data = load_data_gen(dataset_path_name=path)
     get_vocab = GetVocab(data)
     vocab_source, vocab_target = get_vocab.tr_get_vocab(replace_char)
 
@@ -73,12 +76,13 @@ def main():
         print(f"epoch: {batch}, loss_val: {np.mean(losses)}")
         # save the model
         if batch % 10 == 0:
-           net.save_weights("seq2seq_weights")
+           net.save_weights("saved_model/seq2seq_weights")
 
     # plt.plot(loss_all)
     # plt.grid()
     # plt.show()
 
 if __name__ == "__main__":
-    main()
+    args = parser.parse_args()
+    main(args.path)
 
